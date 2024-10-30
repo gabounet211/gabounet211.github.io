@@ -1,0 +1,135 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Construction from "../../components/Construction.astro";
+import { Image, Picture } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import portrait from "../../images/portrait.png";
+import { getCollection } from "astro:content";
+import { getEntry } from "astro:content";
+import Progress from "../../components/Progress.astro";
+
+export function getStaticPaths() {
+	return [
+		{ params: { lang: "fr" as const } },
+		{ params: { lang: "en" as const } },
+	];
+}
+
+const { lang } = Astro.params;
+
+const txts = (
+	{
+		fr: {
+			lang: "Language",
+			writen: "Ecris",
+			spoken: "Parler",
+			hobby: "Passe-Temps",
+			hobbyList: ["Programation", "Camping", "Jeux en ligne"],
+		},
+		en: {
+			lang: "Language",
+			writen: "Writen",
+			spoken: "Spoken",
+			hobby: "Hobbies",
+			hobbyList: ["Programation", "Camping", "Online gaming"],
+		},
+	} as const
+)[lang];
+---
+
+<Layout title="Welcome to Astro.">
+	{import.meta.env.PROD && <Construction />}
+	<header>
+		<div class="container">
+			<div class="header-container">
+				<div class="portrait">
+					<Image
+						widths={[240, 540, 720, portrait.width]}
+						sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${portrait.width}px`}
+						src={portrait}
+						alt="Portrait of Marc-Antoine"
+					/>
+				</div>
+				<div>
+					<h2>Marc-Antoine Desrochers</h2>
+					<button
+						class="outline contrast slim cryptedmail"
+						data-name="marc-antoine"
+						data-domain="desrochers"
+						data-tld="space"></button>
+				</div>
+			</div>
+		</div>
+	</header>
+	<main class="container">
+		<div>
+			{
+				getEntry(lang, "description").then((e) =>
+					e.render().then(({ Content }) => <Content />),
+				)
+			}
+		</div>
+		<aside>
+			<div>
+				<h3>
+					{txts.lang}
+					<span style="float: right"><Icon name="lang" /></span>
+				</h3>
+				<b>{txts.writen}</b>
+				<Progress value={100} link="/fr/"> Francais </Progress>
+				<Progress value={98} link="/en/"> English </Progress>
+				<b>{txts.spoken}</b>
+				<Progress value={100} link="/fr/">Francais</Progress>
+				<Progress value={75} link="/en/">English</Progress>
+				<h3>
+					{txts.hobby}
+				</h3>
+				<ul>
+					{txts.hobbyList.map((h) => <li>{h}</li>)}
+				</ul>
+			</div>
+		</aside>
+	</main>
+	<section>
+		<h2></h2>
+	</section>
+	<footer></footer>
+</Layout>
+
+<style lang="scss">
+	[data-icon="lang"] {
+		vertical-align: -10%;
+	}
+
+	header {
+		background: linear-gradient(var(--pico-primary) 95%, rgba(0, 0, 0, 0));
+
+		.header-container {
+			display: flex;
+			align-items: center;
+			gap: 20px;
+
+			.portrait {
+				height: 10rem;
+			}
+
+			img {
+				object-fit: contain;
+				height: 100%;
+				width: auto;
+				background-color: rgba(0, 0, 0, 50%);
+				clip-path: circle(49%);
+			}
+		}
+	}
+	main {
+		display: flex;
+		gap: 2rem;
+		aside {
+			min-width: 20rem;
+			border: 0.5rem solid;
+			padding: 1rem;
+			//background-color: var(--pico-secondary-background);
+		}
+	}
+</style>

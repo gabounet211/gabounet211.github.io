@@ -1,0 +1,41 @@
+---
+interface Props {
+    value: number;
+    link?: string;
+}
+
+const { value, link } = Astro.props;
+---
+
+<div>
+    <progress value={value} max="100"></progress>
+    {
+        link ? (
+            <a href={link}>
+                <slot />
+            </a>
+        ) : (
+            <span>
+                <slot />
+            </span>
+        )
+    }
+</div>
+
+<style lang="scss">
+    div {
+        position: relative;
+        span,
+        a {
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            color: var(--pico-dropdown-color);
+            text-decoration: none;
+        }
+        progress {
+            //height: calc(1.25rem * var(--pico-font-size));
+            height: 1.5rem;
+        }
+    }
+</style>
