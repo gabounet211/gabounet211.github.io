@@ -20,7 +20,7 @@ const { title } = Astro.props;
 		<slot />
 	</body>
 	<script>
-		Array.from(document.querySelectorAll(".cryptedmail")).forEach(
+		Array.from(document.querySelectorAll(".cryptedmailjs")).forEach(
 			function (element) {
 				let e = element as HTMLElement;
 				e.addEventListener("click", () => {
@@ -37,23 +37,23 @@ const { title } = Astro.props;
 	</script>
 </html>
 <style lang="scss" is:global>
-	@use "@picocss/pico";
+	@use "@picocss/pico/scss/pico" with (
+		$modules: (
+			"components/nav": false,
+		)
+	);
 
 	.cryptedmail:after {
 		content: attr(data-name) "@" attr(data-domain) "." attr(data-tld);
 	}
 
-	.slim {
-		padding: calc(var(--pico-form-element-spacing-vertical) / 2)
-			calc(var(--pico-form-element-spacing-horizontal) / 2);
-	}
-
 	.text {
-		color: var(--pico-dropdown-color);
+		color: var(--pico-color);
 	}
-	[data-icon],[data-icon] * {
-		color: var(--pico-dropdown-color);
-		fill: var(--pico-dropdown-color);
+	[data-icon],
+	[data-icon] * {
+		color: var(--pico-color);
+		fill: var(--pico-color);
 	}
 
 	code {

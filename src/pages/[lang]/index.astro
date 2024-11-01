@@ -24,7 +24,7 @@ const txts = (
 			writen: "Ecris",
 			spoken: "Parler",
 			hobby: "Passe-Temps",
-			hobbyList: ["Programation", "Camping", "Jeux en ligne"],
+			hobbyList: ["Programmation", "Camping", "Jeux en ligne"],
 		},
 		en: {
 			lang: "Language",
@@ -40,26 +40,28 @@ const txts = (
 <Layout title="Welcome to Astro.">
 	{import.meta.env.PROD && <Construction />}
 	<header>
-		<div class="container">
-			<div class="header-container">
-				<div class="portrait">
-					<Image
-						widths={[240, 540, 720, portrait.width]}
-						sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${portrait.width}px`}
-						src={portrait}
-						alt="Portrait of Marc-Antoine"
-					/>
-				</div>
-				<div>
-					<h2>Marc-Antoine Desrochers</h2>
-					<button
-						class="outline contrast slim cryptedmail"
-						data-name="marc-antoine"
-						data-domain="desrochers"
-						data-tld="space"></button>
-				</div>
-			</div>
+		<div class="portrait">
+			<Image
+				widths={[240, 540, 720, portrait.width]}
+				sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${portrait.width}px`}
+				src={portrait}
+				alt="Portrait of Marc-Antoine"
+			/>
+			<button
+				class="outline contrast cryptedmailjs"
+				data-name="marc-antoine"
+				data-domain="desrochers"
+				data-tld="space"
+			>
+				<Icon name="mdi:email-outline" size="1.25rem" />
+			</button>
 		</div>
+		<b>Marc-Antoine Desrochers</b>
+		<nav>
+			<a href={`/${lang}/`} aria-current="page">Home</a>
+			<a href="#">Services</a>
+			<a href="#">Products</a>
+		</nav>
 	</header>
 	<main class="container">
 		<div>
@@ -89,12 +91,36 @@ const txts = (
 				</ul>
 			</div>
 		</aside>
+
+		<section>
+			<h2></h2>
+		</section>
 	</main>
-	<section>
-		<h2></h2>
-	</section>
 	<footer></footer>
 </Layout>
+
+<style lang="scss" is:global>
+	body {
+		display: grid;
+		height: 100vh;
+		width: 100vw;
+		grid-auto-rows: 1fr min-content;
+		grid-template-areas:
+			"a b b"
+			"c c c";
+		column-gap: 2rem;
+	}
+
+	@media (max-width: 1354px) {
+		body {
+			grid-auto-rows: min-content 1fr min-content;
+			grid-template-areas:
+				"a"
+				"b"
+				"c";
+		}
+	}
+</style>
 
 <style lang="scss">
 	[data-icon="lang"] {
@@ -102,17 +128,79 @@ const txts = (
 	}
 
 	header {
-		background: linear-gradient(var(--pico-primary) 95%, rgba(0, 0, 0, 0));
+		grid-area: a;
 
-		.header-container {
+		display: grid;
+		grid-template-areas:
+			"img"
+			"name"
+			"nav"
+			".";
+		grid-template-rows: min-content min-content min-content;
+		justify-items: center;
+		padding-inline: 1rem;
+		gap: 2rem;
+
+		background: linear-gradient(
+			to right,
+			var(--pico-primary) 98%,
+			rgba(0, 0, 0, 0)
+		);
+		--pico-color: var(--pico-primary-inverse);
+		:global(*) {
+			--pico-color: var(--pico-primary-inverse);
+		}
+
+		> b {
+			grid-area: name;
+			text-align: center;
+			color: var(--pico-color);
+		}
+
+		nav {
+			grid-area: nav;
 			display: flex;
-			align-items: center;
-			gap: 20px;
+			flex-direction: column;
+			text-align: center;
+			width: 100%;
 
-			.portrait {
-				height: 10rem;
+			a {
+				box-sizing: border-box;
+				display: block;
+				width: 100%;
+				padding: 1rem;
+				color: var(--pico-primary-inverse);
+				text-decoration: none;
 			}
 
+			a:is([aria-current]) {
+				text-decoration: underline;
+			}
+
+			a:hover {
+				box-shadow: inset 0px 0px 0px var(--pico-border-width)
+					var(--pico-primary-inverse);
+			}
+		}
+
+		.portrait {
+			grid-area: img;
+			position: relative;
+			width: 10rem;
+			height: 10rem;
+
+			> button {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				border: none;
+				padding: 0;
+				--pico-line-height: 1rem;
+
+				&:focus {
+					box-shadow: none;
+				}
+			}
 			img {
 				object-fit: contain;
 				height: 100%;
@@ -123,13 +211,51 @@ const txts = (
 		}
 	}
 	main {
+		grid-area: b;
 		display: flex;
 		gap: 2rem;
 		aside {
-			min-width: 20rem;
+			min-width: 15rem;
 			border: 0.5rem solid;
 			padding: 1rem;
+			height: fit-content;
 			//background-color: var(--pico-secondary-background);
+		}
+	}
+	footer {
+		grid-area: c;
+		height: 2rem;
+		width: 100vw;
+	}
+
+	@media (max-width: 1354px) {
+		header {
+			grid-template-areas:
+				"img name"
+				"img nav";
+			grid-template-columns: min-content 1fr;
+			grid-template-rows: unset;
+			gap: 0;
+			column-gap: 2rem;
+
+			background: linear-gradient(
+				to bottom,
+				var(--pico-primary) 98%,
+				rgba(0, 0, 0, 0)
+			);
+
+			> b {
+				align-self: flex-end;
+				justify-self: start;
+			}
+
+			nav {
+				text-align: start;
+				flex-direction: row;
+				width: auto;
+				justify-self: start;
+				align-self: end;
+			}
 		}
 	}
 </style>
