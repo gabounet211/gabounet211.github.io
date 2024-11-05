@@ -7,6 +7,7 @@ import portrait from "../../images/portrait.png";
 import { getCollection } from "astro:content";
 import { getEntry } from "astro:content";
 import Progress from "../../components/Progress.astro";
+import SkillCarousel from "../../components/SkillCarousel.vue";
 
 export function getStaticPaths() {
 	return [
@@ -27,6 +28,7 @@ const txts = (
 			lang: "Language",
 			writen: "Ecris",
 			spoken: "Parler",
+			prog: "Programmation",
 			hobby: "Passe-Temps",
 			hobbyList: ["Programmation", "Camping", "Jeux en ligne"],
 		},
@@ -38,6 +40,7 @@ const txts = (
 			lang: "Language",
 			writen: "Writen",
 			spoken: "Spoken",
+			prog: "Programming",
 			hobby: "Hobbies",
 			hobbyList: ["Programation", "Camping", "Online gaming"],
 		},
@@ -102,6 +105,7 @@ const txts = (
 				<Progress value={100} link="/fr/">Francais</Progress>
 				<Progress value={75} link="/en/">English</Progress>
 			</div>
+			<SkillCarousel title={txts.prog} client:idle/>
 			<div>
 				<h3>
 					{txts.hobby}

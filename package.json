@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/vue": "^4.5.2",
     "@picocss/pico": "^2.0.6",
     "astro": "^4.16.7",
     "astro-icon": "^1.1.1",
     "sass": "^1.80.5",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vue": "^3.5.12"
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.2.1"
