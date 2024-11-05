@@ -62,6 +62,7 @@ const txts = (
 						data-name="marc-antoine"
 						data-domain="desrochers"
 						data-tld="space"
+						aria-label="Send email"
 					>
 						<Icon name="mdi:email-outline" size="1.25rem" />
 					</button>
@@ -156,7 +157,7 @@ const txts = (
 
 	header {
 		padding: 1rem;
-		background-color: var(--pico-primary);
+		background-color: var(--pico-primary-background);
 
 		> div {
 			display: flex;
@@ -170,7 +171,7 @@ const txts = (
 			row-gap: 1rem;
 			padding: 1rem;
 
-			background: var(--pico-primary);
+			background: var(--pico-primary-background);
 			--pico-color: var(--pico-primary-inverse);
 			:global(*) {
 				--pico-color: var(--pico-primary-inverse);
@@ -261,7 +262,7 @@ const txts = (
 		#focus_section {
 			padding: 1rem;
 			margin-bottom: 0;
-			background-color: var(--pico-secondary);
+			background-color: var(--pico-secondary-background);
 
 			#focus {
 				--pico-color: var(--pico-secondary-inverse);
@@ -276,7 +277,7 @@ const txts = (
 				justify-content: space-around;
 
 				> a {
-					--pico-color: var(--pico-secondary-inverse);
+					--pico-color: var(--pico-h1-color);
 					text-decoration: unset;
 					display: block;
 					width: 20rem;
