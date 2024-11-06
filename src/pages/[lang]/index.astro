@@ -30,7 +30,20 @@ const txts = (
 			spoken: "Parler",
 			prog: "Programmation",
 			hobby: "Passe-Temps",
-			hobbyList: ["Programmation", "Camping", "Jeux en ligne"],
+			hobbyList: [
+				{
+					title: "Programmation",
+					desc: "J'aime travailler sur des projets de programmation personnels qui allient matériel et logiciel pour apprendre de nouvelles technologies.",
+				},
+				{
+					title: "Camping",
+					desc: "J'aime partir en camping avec mon chien pour profiter de la nature et vivre des aventures en plein air.",
+				},
+				{
+					title: "Jeux en ligne",
+					desc: "J'aime jouer à des jeux en ligne avec des modifications personnalisées qui demandent créativité, stratégie et exploration.",
+				},
+			],
 		},
 		en: {
 			otherLang: "Francais",
@@ -42,7 +55,20 @@ const txts = (
 			spoken: "Spoken",
 			prog: "Programming",
 			hobby: "Hobbies",
-			hobbyList: ["Programation", "Camping", "Online gaming"],
+			hobbyList: [
+				{
+					title: "Programation",
+					desc: "I enjoy working on personal programming projects that bridge hardware and software to learn new technology",
+				},
+				{
+					title: "Camping",
+					desc: "I enjoy going camping with my dog to enjoy nature and have outdoor adventures.",
+				},
+				{
+					title: "Online gaming",
+					desc: "I enjoy playing online games with custom modifications that involve creativity, strategy, and exploration.",
+				},
+			],
 		},
 	} as const
 )[lang];
@@ -95,24 +121,33 @@ const txts = (
 				{txts.lang}
 				<span style="float: right"><Icon name="lang" /></span>
 			</h3>
-			<div>
-				<b>{txts.writen}</b>
-				<Progress value={100} link="/fr/"> Francais </Progress>
-				<Progress value={98} link="/en/"> English </Progress>
+			<div class="lang">
+				<div>
+					<b>{txts.writen}</b>
+					<Progress value={100} link="/fr/"> Francais </Progress>
+					<Progress value={98} link="/en/"> English </Progress>
+				</div>
+				<div>
+					<b>{txts.spoken}</b>
+					<Progress value={100} link="/fr/">Francais</Progress>
+					<Progress value={75} link="/en/">English</Progress>
+				</div>
 			</div>
-			<div>
-				<b>{txts.spoken}</b>
-				<Progress value={100} link="/fr/">Francais</Progress>
-				<Progress value={75} link="/en/">English</Progress>
-			</div>
-			<SkillCarousel title={txts.prog} client:idle/>
-			<div>
+			<SkillCarousel title={txts.prog} client:idle />
+			<div class="hobby">
 				<h3>
 					{txts.hobby}
 				</h3>
-				<ul>
-					{txts.hobbyList.map((h) => <li>{h}</li>)}
-				</ul>
+				<div>
+					{
+						txts.hobbyList.map((h) => (
+							<article>
+								<h1>{h.title}</h1>
+								<p>{h.desc}</p>
+							</article>
+						))
+					}
+				</div>
 			</div>
 		</section>
 		<section id="focus_section" class="container-fluid">
@@ -252,14 +287,33 @@ const txts = (
 		padding-block: 0;
 
 		#skills_section {
-			display: grid;
+			display: flex;
+			flex-direction: column;
 			padding-top: 2rem;
-			grid-template: min-content 1fr / 1fr 1fr;
-			column-gap: 1rem;
 
-			h2,
-			h3 {
-				grid-column-start: span 2;
+			.lang {
+				display: flex;
+				column-gap: 1rem;
+				> div {
+					flex-grow: 1;
+				}
+			}
+
+			.hobby {
+				> div {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 1rem;
+					justify-content: space-around;
+					> article {
+						width: 18rem;
+						min-height: 10rem;
+						--tmp-font-size: var(--pico-font-size);
+						h1 {
+							font-size: var(--tmp-font-size);
+						}
+					}
+				}
 			}
 		}
 
@@ -287,7 +341,7 @@ const txts = (
 					width: 20rem;
 					background: var(--pico-background-color);
 
-					transition: transform .2s;
+					transition: transform 0.2s;
 					&:hover {
 						transform: scale(101%) rotate(0.001turn);
 					}
@@ -313,8 +367,8 @@ const txts = (
 				}
 			}
 		}
-		main{
-			#skills_section{
+		main {
+			#skills_section {
 			}
 		}
 	}
