@@ -15,20 +15,42 @@ onMounted(() => {
 });
 
 const list = [
-    "node.js",
+    //language
     "typescript",
     "javascript",
     "html",
     "css",
+    "sass",
+    "c#",
     "rust",
     "lua",
     "python",
     "java",
-    "c#",
+    "|",//runtime
     "linux",
+    "node.js",
+    "deno",
+    "Cortex-M",
+    "ARMv7",
+    "|",//app
     "git",
-    "docker"
+    "docker",
+    "|",//db
+    "sql",
+    "redis",
+    "mongodb",
+    "kafka",
+    "rabbitmq",
+    "|",//framework/library
+    "vuejs",
+    "astro",
+    "jquery",
+    "vite",
+    "webpack",
+    "|",
 ]
+
+const speed = list.length + "s";
 
 </script>
 
@@ -66,8 +88,12 @@ const list = [
         gap: 2rem;
         
         position: relative;
-        animation: slide 7s linear 0s infinite forwards;
+        animation: slide v-bind(speed) linear 0s infinite forwards;
         animation-play-state: running;
+
+        >span{
+            text-wrap: nowrap;
+        }
     }
 }
 

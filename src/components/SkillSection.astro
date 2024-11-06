@@ -1,0 +1,125 @@
+---
+import { Icon } from "astro-icon/components";
+import Progress from "./Progress.astro";
+import SkillCarousel from "./SkillCarousel.vue";
+
+const props = Astro.props;
+const local = Astro.currentLocale;
+const txts = (
+    {
+        fr: {
+            skills: "Compétences",
+            lang: "Language",
+            writen: "Ecris",
+            spoken: "Parler",
+			prog: "Programmation",
+            hobby: "Passe-Temps",
+            hobbyList: [
+                {
+                    title: "Programmation",
+                    desc: "J'aime travailler sur des projets de programmation personnels qui allient matériel et logiciel pour apprendre de nouvelles technologies.",
+                },
+                {
+                    title: "Camping",
+                    desc: "J'aime partir en camping avec mon chien pour profiter de la nature et vivre des aventures en plein air.",
+                },
+                {
+                    title: "Jeux en ligne",
+                    desc: "J'aime jouer à des jeux en ligne avec des modifications personnalisées qui demandent créativité, stratégie et exploration.",
+                },
+            ],
+        },
+        en: {
+            skills: "Skills",
+            lang: "Language",
+            writen: "Writen",
+            spoken: "Spoken",
+			prog: "Programation",
+            hobby: "Hobbies",
+            hobbyList: [
+                {
+                    title: "Programation",
+                    desc: "I enjoy working on personal programming projects that bridge hardware and software to learn new technology",
+                },
+                {
+                    title: "Camping",
+                    desc: "I enjoy going camping with my dog to enjoy nature and have outdoor adventures.",
+                },
+                {
+                    title: "Online gaming",
+                    desc: "I enjoy playing online games with custom modifications that involve creativity, strategy, and exploration.",
+                },
+            ],
+        },
+    } as const
+)[local ?? "fr"]!;
+---
+
+<section class="container">
+    <h2 id="skills">{txts.skills}</h2>
+    <h3>
+        {txts.lang}
+        <span style="float: right"><Icon name="lang" /></span>
+    </h3>
+    <div class="lang">
+        <div>
+            <b>{txts.writen}</b>
+            <Progress value={100} link="/fr/"> Francais </Progress>
+            <Progress value={98} link="/en/"> English </Progress>
+        </div>
+        <div>
+            <b>{txts.spoken}</b>
+            <Progress value={100} link="/fr/">Francais</Progress>
+            <Progress value={75} link="/en/">English</Progress>
+        </div>
+    </div>
+    <SkillCarousel title={txts.prog} client:idle />
+    <div class="hobby">
+        <h3>
+            {txts.hobby}
+        </h3>
+        <div>
+            {
+                txts.hobbyList.map((h) => (
+                    <article>
+                        <h1>{h.title}</h1>
+                        <p>{h.desc}</p>
+                    </article>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    section {
+        display: flex;
+        flex-direction: column;
+        padding-top: 2rem;
+
+        .lang {
+            display: flex;
+            column-gap: 1rem;
+            > div {
+                flex-grow: 1;
+            }
+        }
+
+        .hobby {
+            > div {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: space-around;
+                > article {
+                    width: 18rem;
+                    min-height: 10rem;
+                    --tmp-font-size: var(--pico-font-size);
+                    h1 {
+                        font-size: var(--tmp-font-size);
+                    }
+                }
+            }
+        }
+    }
+</style>

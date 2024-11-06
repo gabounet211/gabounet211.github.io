@@ -1,0 +1,98 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import portrait from "../../../images/portrait.png";
+import { Icon } from "astro-icon/components";
+
+export async function getStaticPaths() {
+	const pages = await getCollection("focus");
+
+	const paths = pages.map((page) => {
+		const [lang, ...slug] = page.slug.split("/");
+		return {
+			params: { lang, slug: slug.join("/") || undefined },
+			props: page,
+		};
+	});
+
+	return paths;
+}
+
+const { lang, slug } = Astro.params;
+const page = Astro.props;
+
+const { Content } = await page.render();
+---
+
+<Layout title={`Marc-Antoine Desrochers - ${page.data.title}`}>
+	<header>
+		<button onclick={"window.location.href =" + JSON.stringify("/"+lang)}>
+			<Icon name="mdi:home" size="2rem" />
+		</button>
+		<h1>Marc-Antoine Desrochers - {page.data.title}</h1>
+		<div class="portrait">
+			<Image
+				widths={[240, 540, 720, portrait.width]}
+				sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${portrait.width}px`}
+				src={portrait}
+				alt="Portrait of Marc-Antoine"
+			/>
+			<button
+				class="outline contrast cryptedmailjs"
+				data-name="marc-antoine"
+				data-domain="desrochers"
+				data-tld="space"
+				aria-label="Send email"
+			>
+				<Icon name="mdi:email-outline" size="1.25rem" />
+			</button>
+		</div>
+	</header>
+	<main>
+		<Content />
+	</main>
+	<footer></footer>
+</Layout>
+
+<style lang="scss">
+	header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 1rem;
+		background-color: var(--pico-primary-background);
+
+		.portrait {
+			position: relative;
+			width: 5rem;
+			height: 5rem;
+
+			> button {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				border: none;
+				padding: 0;
+				--pico-line-height: 1rem;
+
+				&:focus {
+					box-shadow: none;
+				}
+			}
+			img {
+				object-fit: contain;
+				height: 100%;
+				width: 100%;
+				background-color: rgba(0, 0, 0, 50%);
+				clip-path: circle(49%);
+			}
+		}
+
+		> h1 {
+			text-align: center;
+			color: var(--pico-color);
+			margin-bottom: 0;
+		}
+	}
+</style>

@@ -1,0 +1,191 @@
+---
+import Layout from "./Layout.astro";
+import Construction from "../components/Construction.astro";
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+import portrait from "../images/portrait.png";
+
+interface Props {
+	title: string;
+	nav: {
+		icon?: string;
+		txt: string;
+		href: string;
+	}[];
+}
+
+const props = Astro.props;
+---
+
+<Layout title={props.title}>
+	{import.meta.env.PROD && <Construction />}
+	<header>
+		{/*need that div only for 4k screen. The background is cut by max-width without it.*/}
+		<div>
+			<div class="left">
+				<div class="portrait">
+					<Image
+						widths={[240, 540, 720, portrait.width]}
+						sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${portrait.width}px`}
+						src={portrait}
+						alt="Portrait of Marc-Antoine"
+						loading="eager"
+					/>
+					<button
+						class="outline contrast cryptedmailjs"
+						data-name="marc-antoine"
+						data-domain="desrochers"
+						data-tld="space"
+						aria-label="Send email"
+					>
+						<Icon name="mdi:email-outline" size="1.25rem" />
+					</button>
+				</div>
+				<b>Marc-Antoine Desrochers</b>
+				<nav>
+					{
+						props.nav.map((l) =>
+							l.icon ? (
+								<a href={l.href}>
+									<Icon name={l.icon} />
+									{l.txt}
+								</a>
+							) : (
+								<a href={l.href}>{l.txt}</a>
+							),
+						)
+					}
+				</nav>
+			</div>
+			<div class="desc">
+				<slot name="desc" />
+			</div>
+		</div>
+	</header>
+	<main>
+		<slot />
+	</main>
+	<footer>
+		<slot name="footer" />
+	</footer>
+</Layout>
+
+<style lang="scss">
+	[data-icon="lang"] {
+		vertical-align: -10%;
+	}
+
+	header {
+		padding: 1rem;
+		background-color: var(--pico-primary-background);
+
+		> div {
+			display: flex;
+			flex-direction: column;
+			max-width: 1500px;
+			margin-inline: auto;
+		}
+
+		.left {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			row-gap: 1rem;
+			padding: 1rem;
+
+			background: var(--pico-primary-background);
+			--pico-color: var(--pico-primary-inverse);
+			:global(*) {
+				--pico-color: var(--pico-primary-inverse);
+			}
+
+			nav {
+				grid-area: nav;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
+				width: 100%;
+
+				a {
+					box-sizing: border-box;
+					display: block;
+					width: 100%;
+					padding: 1rem;
+					color: var(--pico-primary-inverse);
+					text-decoration: none;
+
+					&:is([aria-current]) {
+						text-decoration: underline;
+					}
+
+					&:hover {
+						box-shadow: inset 0px 0px 0px var(--pico-border-width)
+							var(--pico-primary-inverse);
+					}
+				}
+			}
+
+			> b {
+				grid-area: name;
+				text-align: center;
+				color: var(--pico-color);
+			}
+
+			.portrait {
+				grid-area: img;
+				position: relative;
+				width: 10rem;
+				height: 10rem;
+
+				> button {
+					position: absolute;
+					bottom: 0;
+					right: 0;
+					border: none;
+					padding: 0;
+					--pico-line-height: 1rem;
+
+					&:focus {
+						box-shadow: none;
+					}
+				}
+				img {
+					object-fit: contain;
+					height: 100%;
+					width: 100%;
+					background-color: rgba(0, 0, 0, 50%);
+					clip-path: circle(49%);
+				}
+			}
+		}
+
+		.desc {
+			padding: 2rem;
+			background-color: var(--pico-background-color);
+		}
+	}
+
+	main {
+		padding-block: 0;
+	}
+
+	footer {
+		height: 2rem;
+		width: 100%;
+	}
+
+	@media (min-width: 768px) {
+		header {
+			padding-left: 0;
+			> div {
+				flex-direction: row;
+			}
+			.left {
+				nav {
+					flex-direction: column;
+				}
+			}
+		}
+	}
+</style>
