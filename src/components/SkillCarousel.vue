@@ -25,6 +25,9 @@ const list = [
     "python",
     "java",
     "c#",
+    "linux",
+    "git",
+    "docker"
 ]
 
 </script>
@@ -54,7 +57,6 @@ const list = [
 .myBanner {
     display: flex;
     gap: 2rem;
-    grid-column: span 2;
     margin-bottom: 1rem;
     overflow: hidden;
 
@@ -64,7 +66,7 @@ const list = [
         gap: 2rem;
         
         position: relative;
-        animation: slide 6s linear 0s infinite forwards;
+        animation: slide 7s linear 0s infinite forwards;
         animation-play-state: running;
     }
 }

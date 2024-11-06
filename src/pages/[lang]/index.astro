@@ -176,19 +176,6 @@ const txts = (
 	<footer></footer>
 </Layout>
 
-<script>
-	document.addEventListener(
-		"click",
-		(e) => {
-			if (e.target instanceof HTMLElement) {
-				if (e.target.dataset["link"])
-					window.location.href = e.target.dataset.link;
-			}
-		},
-		false,
-	);
-</script>
-
 <style lang="scss">
 	[data-icon="lang"] {
 		vertical-align: -10%;
@@ -367,10 +354,6 @@ const txts = (
 				nav {
 					flex-direction: column;
 				}
-			}
-		}
-		main {
-			#skills_section {
 			}
 		}
 	}
