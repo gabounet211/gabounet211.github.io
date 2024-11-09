@@ -4,6 +4,7 @@ import Construction from "../components/Construction.astro";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import portrait from "../images/portrait.png";
+import Portrait from "../components/Portrait.astro";
 
 interface Props {
 	title: string;
@@ -23,24 +24,7 @@ const props = Astro.props;
 		{/*need that div only for 4k screen. The background is cut by max-width without it.*/}
 		<div>
 			<div class="left">
-				<div class="portrait">
-					<Image
-						widths={[240, 540, 720, portrait.width]}
-						sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${portrait.width}px`}
-						src={portrait}
-						alt="Portrait of Marc-Antoine"
-						loading="eager"
-					/>
-					<button
-						class="outline contrast cryptedmailjs"
-						data-name="marc-antoine"
-						data-domain="desrochers"
-						data-tld="space"
-						aria-label="Send email"
-					>
-						<Icon name="mdi:email-outline" size="1.25rem" />
-					</button>
-				</div>
+				<Portrait width="10rem" />
 				<b>Marc-Antoine Desrochers</b>
 				<nav>
 					{
@@ -130,33 +114,6 @@ const props = Astro.props;
 				grid-area: name;
 				text-align: center;
 				color: var(--pico-color);
-			}
-
-			.portrait {
-				grid-area: img;
-				position: relative;
-				width: 10rem;
-				height: 10rem;
-
-				> button {
-					position: absolute;
-					bottom: 0;
-					right: 0;
-					border: none;
-					padding: 0;
-					--pico-line-height: 1rem;
-
-					&:focus {
-						box-shadow: none;
-					}
-				}
-				img {
-					object-fit: contain;
-					height: 100%;
-					width: 100%;
-					background-color: rgba(0, 0, 0, 50%);
-					clip-path: circle(49%);
-				}
 			}
 		}
 
