@@ -38,11 +38,7 @@ const { title } = Astro.props;
 	</script>
 </html>
 <style lang="scss" is:global>
-	@use "@picocss/pico/scss/pico" with (
-		$modules: (
-			"components/nav": false,
-		)
-	);
+	@use "@picocss/pico/scss/pico";
 
 	.cryptedmail:after {
 		content: attr(data-name) "@" attr(data-domain) "." attr(data-tld);

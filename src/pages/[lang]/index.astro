@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import { getEntry } from "astro:content";
 import SkillSection from "../../components/SkillSection.astro";
 import CVLayout from "../../layouts/CVLayout.astro";
+import { getPostHierarchy } from "../../plugins/postMD";
 
 export function getStaticPaths() {
 	return [
@@ -19,16 +20,18 @@ const txts = (
 			otherLang: "English",
 			_otherLang: "en",
 			skills: "Compétences",
-			post: "Posts",
+			post: "Catégories de publication",
 		},
 		en: {
 			otherLang: "Francais",
 			_otherLang: "fr",
 			skills: "Skills",
-			post: "Posts",
+			post: "Post Categories",
 		},
 	} as const
 )[lang];
+
+const posts = await getPostHierarchy(lang);
 ---
 
 <CVLayout
@@ -62,21 +65,19 @@ const txts = (
 			<h2 id="post">{txts.post}</h2>
 			<div>
 				{
-					getCollection("post").then((c) =>
-						c.map((a) => {
-							const [fLang, ...slug] = a.slug.split("/");
-							if (fLang != lang) return;
-							const link = `/${lang}/post/${slug.join("/")}`;
-							return (
-								<a href={link}>
-									<article>
-										<h1>{a.data.title}</h1>
-										<p>{a.data.short}</p>
-									</article>
-								</a>
-							);
-						}),
-					)
+					posts.children.map((a) => {
+						const [fLang, ...slug] = a.slug.split("/");
+						if (fLang != lang) return;
+						const link = `/${lang}/post/${slug.join("/")}`;
+						return (
+							<a href={link}>
+								<article>
+									<h1>{a.data.title}</h1>
+									<p>{a.data.short}</p>
+								</article>
+							</a>
+						);
+					})
 				}
 			</div>
 		</section>

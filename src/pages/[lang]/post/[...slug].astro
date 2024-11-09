@@ -1,14 +1,15 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../../../layouts/Layout.astro";
-import { Image } from "astro:assets";
-import portrait from "../../../images/portrait.png";
-import { Icon } from "astro-icon/components";
+import Portrait from "../../../components/Portrait.astro";
+import { getEntry } from "astro:content";
+import { getPostHierarchy } from "../../../plugins/postMD";
 
 export async function getStaticPaths() {
-	const pages = await getCollection("focus");
+	const pages = await getCollection("post");
 
 	const paths = pages.map((page) => {
+		console.log(page.slug.split("/"));
 		const [lang, ...slug] = page.slug.split("/");
 		return {
 			params: { lang, slug: slug.join("/") || undefined },
@@ -22,77 +23,169 @@ export async function getStaticPaths() {
 const { lang, slug } = Astro.params;
 const page = Astro.props;
 
-const { Content } = await page.render();
+const txts = (
+	{
+		fr: {
+			otherLang: "English",
+			_otherLang: "en",
+			home: "Aceuil",
+		},
+		en: {
+			otherLang: "Francais",
+			_otherLang: "fr",
+			home: "Home",
+		},
+	} as const
+)[lang]!;
+
+const { Content, remarkPluginFrontmatter } = await page.render();
+const { children, postBread } = await getPostHierarchy(page.slug);
 ---
 
 <Layout title={`Marc-Antoine Desrochers - ${page.data.title}`}>
 	<header>
-		<button onclick={"window.location.href =" + JSON.stringify("/"+lang)}>
-			<Icon name="mdi:home" size="2rem" />
-		</button>
-		<h1>Marc-Antoine Desrochers - {page.data.title}</h1>
-		<div class="portrait">
-			<Image
-				widths={[240, 540, 720, portrait.width]}
-				sizes={`(max-width: 360px) 240px, (max-width: 720px) 540px, (max-width: 1600px) 720px, ${portrait.width}px`}
-				src={portrait}
-				alt="Portrait of Marc-Antoine"
-			/>
-			<button
-				class="outline contrast cryptedmailjs"
-				data-name="marc-antoine"
-				data-domain="desrochers"
-				data-tld="space"
-				aria-label="Send email"
-			>
-				<Icon name="mdi:email-outline" size="1.25rem" />
-			</button>
-		</div>
+		<h1>{page.data.title}</h1>
+		<nav aria-label="breadcrumb">
+			<ul>
+				<li><a href={`/${lang}/`}>{txts.home}</a></li>
+				{
+					postBread.map((b, i) => {
+						if (!b.slug || postBread.length - 1 === i)
+							return <li>{b.title}</li>;
+						const [fLang, ...slug] = b.slug.split("/");
+						const link = `/${fLang}/post/${slug.join("/")}`;
+						return (
+							<li>
+								<a href={link}>{b.title}</a>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</nav>
 	</header>
-	<main>
+	<section id="author" class="container">
+		<Portrait width="5rem" bgColor="rgb(255 255 255 / 50%)" />
+		<b>Marc-Antoine Desrochers</b>
+	</section>
+	<main class="container">
+		{JSON.stringify(remarkPluginFrontmatter)}
 		<Content />
 	</main>
+	{
+		children && (
+			<section id="children">
+				<h2>TODO</h2>
+				<div>
+					{children.map((p) => {
+						const [fLang, ...slug] = p.slug.split("/");
+						if (fLang != lang)
+							throw new Error(
+								`Post "${page.id}" refer to wrong language for "${p.id}"`,
+							);
+						const link = `/${lang}/post/${slug.join("/")}`;
+						return (
+							<a href={link}>
+								<article>
+									<h1>{p.data.title}</h1>
+									<p>{p.data.short}</p>
+								</article>
+							</a>
+						);
+					})}
+				</div>
+			</section>
+		)
+	}
 	<footer></footer>
 </Layout>
 
 <style lang="scss">
 	header {
 		display: flex;
+		position: relative;
+		flex-direction: column;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: center;
 		padding: 1rem;
+
 		background-color: var(--pico-primary-background);
+		--pico-color: var(--pico-primary-inverse);
+		:global(*) {
+			--pico-color: var(--pico-primary-inverse);
+		}
 
-		.portrait {
-			position: relative;
-			width: 5rem;
-			height: 5rem;
-
-			> button {
-				position: absolute;
-				bottom: 0;
-				right: 0;
-				border: none;
-				padding: 0;
-				--pico-line-height: 1rem;
-
-				&:focus {
-					box-shadow: none;
-				}
+		nav ul li {
+			&::after {
+				color: var(--pico-color);
 			}
-			img {
-				object-fit: contain;
-				height: 100%;
-				width: 100%;
-				background-color: rgba(0, 0, 0, 50%);
-				clip-path: circle(49%);
-			}
+			padding-block: 0;
 		}
 
 		> h1 {
 			text-align: center;
 			color: var(--pico-color);
-			margin-bottom: 0;
+		}
+	}
+
+	#author {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 0.5rem;
+		box-shadow: var(--pico-box-shadow);
+		background: var(--pico-contrast-background);
+
+		--pico-color: var(--pico-contrast-inverse);
+		b {
+			color: var(--pico-color);
+			font-size: 1.25rem;
+		}
+		:global(*) {
+			--pico-color: var(--pico-contrast-inverse);
+		}
+	}
+
+	#children {
+		padding: 1rem;
+		margin-bottom: 0;
+		background-color: var(--pico-secondary-background);
+
+		h2 {
+			--pico-color: var(--pico-secondary-inverse);
+			text-align: center;
+		}
+
+		> div {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1rem;
+			padding-inline: 1rem;
+			justify-content: space-around;
+
+			> a {
+				--pico-color: var(--pico-h1-color);
+				text-decoration: unset;
+				display: block;
+				width: 20rem;
+				min-width: 20rem;
+				background: var(--pico-background-color);
+
+				transition: transform 0.2s;
+				&:hover {
+					transform: scale(101%) rotate(0.001turn);
+				}
+			}
+		}
+	}
+
+	@media (min-width: 576px) {
+		#author {
+			align-items: center;
+			gap: 2rem;
+			padding: 1rem;
+			margin-top: var(--pico-block-spacing-vertical);
+			border-radius: 3vmin;
 		}
 	}
 </style>
