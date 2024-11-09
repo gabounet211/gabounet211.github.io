@@ -16,14 +16,26 @@ interface Props {
 }
 
 const props = Astro.props;
+const local = Astro.currentLocale;
+const otherLang = { fr: "en", en: "fr" }[local!];
 ---
 
 <Layout title={props.title}>
 	{import.meta.env.PROD && <Construction />}
 	<header>
-		{/*need that div only for 4k screen. The background is cut by max-width without it.*/}
+		{
+			/*need that div only for 4k screen. The background is cut by max-width without it.*/
+		}
 		<div>
 			<div class="left">
+				<a
+					class="lang"
+					href={`/${otherLang}/`}
+					aria-label="Change language"
+				>
+					<Icon name="lang" size="1.25rem" />
+					<span>{otherLang}</span>
+				</a>
 				<Portrait width="10rem" />
 				<b>Marc-Antoine Desrochers</b>
 				<nav>
@@ -71,6 +83,7 @@ const props = Astro.props;
 		}
 
 		.left {
+			position: relative;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -81,6 +94,29 @@ const props = Astro.props;
 			--pico-color: var(--pico-primary-inverse);
 			:global(*) {
 				--pico-color: var(--pico-primary-inverse);
+			}
+
+			> .lang {
+				position: absolute;
+				display: flex;
+				align-items: center;
+				top: -0.25rem;
+				left: calc(50% - 5rem);
+				transform: translateX(-25%);
+				border: none;
+				z-index: 1;
+				padding: 1rem;
+				text-decoration: none;
+
+				span {
+					font-size: 0.75rem;
+					--pico-line-height: 0.75rem;
+					text-transform: capitalize;
+				}
+
+				&:focus {
+					box-shadow: none;
+				}
 			}
 
 			nav {
@@ -98,6 +134,7 @@ const props = Astro.props;
 					padding: 1rem;
 					color: var(--pico-primary-inverse);
 					text-decoration: none;
+					text-wrap: nowrap;
 
 					&:is([aria-current]) {
 						text-decoration: underline;
@@ -118,6 +155,7 @@ const props = Astro.props;
 		}
 
 		.desc {
+			border-radius: 1vmin;
 			padding: 2rem;
 			background-color: var(--pico-background-color);
 		}

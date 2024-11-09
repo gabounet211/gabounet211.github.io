@@ -17,16 +17,12 @@ const { lang } = Astro.params;
 const txts = (
 	{
 		fr: {
-			otherLang: "English",
-			_otherLang: "en",
 			skills: "Compétences",
-			post: "Catégories de publication",
+			post: "Publications",
 		},
 		en: {
-			otherLang: "Francais",
-			_otherLang: "fr",
 			skills: "Skills",
-			post: "Post Categories",
+			post: "Posts",
 		},
 	} as const
 )[lang];
@@ -37,11 +33,6 @@ const posts = await getPostHierarchy(lang);
 <CVLayout
 	title="Marc-Antoine Desrochers"
 	nav={[
-		{
-			href: `/${txts._otherLang}/`,
-			txt: txts.otherLang,
-			icon: "lang",
-		},
 		{
 			href: `#skills`,
 			txt: txts.skills,
