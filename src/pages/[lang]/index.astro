@@ -105,7 +105,8 @@ const posts = await getPostHierarchy(lang);
 				width: 20rem;
 				background: var(--pico-background-color);
 
-				transition: transform 0.2s;
+				will-change: transform, scale;
+				transition: transform 0.2s,scale 0.2s;
 				&:hover {
 					transform: scale(101%) rotate(0.001turn);
 				}
