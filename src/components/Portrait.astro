@@ -5,7 +5,7 @@ import { Icon } from "astro-icon/components";
 
 interface Props {
     bgColor?: string;
-    width: string
+    width: string;
 }
 
 const props = Astro.props;
@@ -20,6 +20,9 @@ const width = props.width;
         src={portrait}
         alt="Portrait of Marc-Antoine"
     />
+    <a class="contrast" aria-label="Open github" href="https://github.com/11mad11/11mad11.github.io">
+        <Icon name="mdi:github-circle" size="1.5rem" />
+    </a>
     <button
         class="outline contrast cryptedmailjs"
         data-name="marc-antoine"
@@ -31,12 +34,18 @@ const width = props.width;
     </button>
 </div>
 
-<style lang="scss" define:vars={{ bgColor,width }}>
+<style lang="scss" define:vars={{ bgColor, width }}>
     .portrait {
         position: relative;
         min-width: var(--width);
         width: var(--width);
         height: var(--width);
+
+        > a {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
 
         > button {
             position: absolute;
