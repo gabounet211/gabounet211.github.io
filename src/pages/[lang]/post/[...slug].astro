@@ -42,7 +42,7 @@ const { Content, remarkPluginFrontmatter } = await page.render();
 const { children, postBread } = await getPostHierarchy(page.slug);
 ---
 
-<Layout title={`Marc-Antoine Desrochers - ${page.data.title}`}>
+<Layout title={`Gabriel - ${page.data.title}`}>
 	<header>
 		<h1>{page.data.title}</h1>
 		<nav aria-label="breadcrumb">
@@ -66,7 +66,7 @@ const { children, postBread } = await getPostHierarchy(page.slug);
 	</header>
 	<section id="author" class="container">
 		<Portrait width="5rem" bgColor="rgb(255 255 255 / 50%)" />
-		<b>Marc-Antoine Desrochers</b>
+		<b>Gabriel Desrochers</b>
 	</section>
 	<main class="container">
 		{JSON.stringify(remarkPluginFrontmatter)}

@@ -15,39 +15,21 @@ onMounted(() => {
 });
 
 const list = [
-    //language
-    "typescript",
-    "javascript",
-    "html",
-    "css",
-    "sass",
-    "c#",
-    "rust",
-    "lua",
-    "python",
-    "java",
-    "|",//runtime
-    "linux",
-    "node.js",
-    "deno",
-    "Cortex-M",
-    "ARMv7",
-    "|",//app
-    "git",
-    "docker",
-    "|",//db
-    "sql",
-    "redis",
-    "mongodb",
-    "kafka",
-    "rabbitmq",
-    "|",//framework/library
-    "vuejs",
-    "astro",
-    "jquery",
-    "vite",
-    "webpack",
+    //app
     "|",
+    "blender",
+    "3dsmax",
+    "zbrush",
+    "photoshop",
+    "unreal5",
+    "adobe premier",
+    "autocad",
+    "|",
+    //general
+    "video",
+    "cad",
+    "normal map",
+    "texture"
 ]
 
 const speed = list.length + "s";

@@ -9,7 +9,7 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://marc-antoine.desrochers.space',
+  site: 'https://gabriel.desrochers.space',
 
   i18n: {
       defaultLocale: "fr",
